@@ -6,8 +6,8 @@ using UnityEngine.AI ;
 
 public class UnitMovement : NetworkBehaviour
 {
-    [SerializeField]
-    private NavMeshAgent agent;
+    [SerializeField]private NavMeshAgent agent;
+    [SerializeField] Targeter targeter = null;
 
     #region Server
     [ServerCallback] // [Server] attribute will only run the update() on the server. [ServerCallback the same but will not show warning and logs in the console.
@@ -24,6 +24,7 @@ public class UnitMovement : NetworkBehaviour
     [Command] // this method implementation is a command ran on the server invoked by the client prefixed as Cmd...
     public void CmdMove(Vector3 position)
     {
+        targeter.ClearTarget();
         if(!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) { return; }
         agent.SetDestination(hit.position);
     }
