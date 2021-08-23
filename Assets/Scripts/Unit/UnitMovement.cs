@@ -7,12 +7,40 @@ using UnityEngine.AI ;
 public class UnitMovement : NetworkBehaviour
 {
     [SerializeField]private NavMeshAgent agent;
-    [SerializeField] Targeter targeter = null;
+    [SerializeField] Targeter targeter = null; // mainly drag adn drop in fields inspector instead getting components through scripts
+    [SerializeField] private float chaseRange = 10f; // chase the target if we're outside this value
 
     #region Server
     [ServerCallback] // [Server] attribute will only run the update() on the server. [ServerCallback the same but will not show warning and logs in the console.
     private void Update()
     {
+        Targetable target = targeter.GetTarget();
+
+        // chasing
+        if (targeter.GetTarget())
+        {
+
+            // Simple Way - Vector3.Distance(a,b) is the same as (a-b).magnitude.
+            // Problem is that it uses SquareRoots and these are quite slow as it being called every frame(REM: WE ARE IN UPDATE METHOD)
+            // if(Vector3.Distance(target.transform.position, transform.position) -> Returns the distance between a and b.
+            if ((target.transform.position - transform.position).sqrMagnitude > chaseRange * chaseRange) // doing the auare lot more efficient
+                // the sqrMagnitude do the square instead of doing the SquareRoot and this is lot more efficient
+                // check sqrMagnitude if it is graeater than the square of our chaseRange. Here we are comparing the square result on each 
+            {
+                // if is checkign if we are out of the cahase range, then: chase
+                agent.SetDestination(target.transform.position);
+                
+            }
+            else if (agent.hasPath) // else, restart the path
+            {
+                // stop chase;
+                agent.ResetPath();
+            }
+            return;
+        }
+
+        // DO the below if the above if() statement does not run!
+
         // over here the if checks if units has the paths and reached until it is removed
         // on each frame.
         if(agent.hasPath) { return; } // 
@@ -21,7 +49,7 @@ public class UnitMovement : NetworkBehaviour
         // ... so it will yield for other units still has the path to go
     }
 
-    [Command] // this method implementation is a command ran on the server invoked by the client prefixed as Cmd...
+    [Command] // this method implementation is a command running on the server invoked by the client prefixed as Cmd...
     public void CmdMove(Vector3 position)
     {
         targeter.ClearTarget();
