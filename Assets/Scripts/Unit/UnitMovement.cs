@@ -15,11 +15,10 @@ public class UnitMovement : NetworkBehaviour
     private void Update()
     {
         Targetable target = targeter.GetTarget();
-
+       
         // chasing
         if (targeter.GetTarget())
-        {
-
+        {            
             // Simple Way - Vector3.Distance(a,b) is the same as (a-b).magnitude.
             // Problem is that it uses SquareRoots and these are quite slow as it being called every frame(REM: WE ARE IN UPDATE METHOD)
             // if(Vector3.Distance(target.transform.position, transform.position) -> Returns the distance between a and b.
@@ -44,7 +43,7 @@ public class UnitMovement : NetworkBehaviour
         // over here the if checks if units has the paths and reached until it is removed
         // on each frame.
         if(agent.hasPath) { return; } // 
-        if(agent.remainingDistance >= agent.stoppingDistance) { return; } // if unit did not reach the stopping ditance do not continue so will try to reach until the stopping distance is reached
+        if(agent.remainingDistance > agent.stoppingDistance) { return; } // if unit did not reach the stopping ditance do not continue so will try to reach until the stopping distance is reached
         agent.ResetPath(); // if agent(unit) is within the stopping distance do not follow the path
         // ... so it will yield for other units still has the path to go
     }
@@ -53,7 +52,7 @@ public class UnitMovement : NetworkBehaviour
     public void CmdMove(Vector3 position)
     {
         targeter.ClearTarget();
-        if(!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) { return; }
+        if(!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) { return; }             
         agent.SetDestination(hit.position);
     }
 

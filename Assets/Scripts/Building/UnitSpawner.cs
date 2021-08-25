@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+// UnitSpawner is the red box which pops out visible when a client connects with a running host(Server) or when a server is first started.
+
 public class UnitSpawner : NetworkBehaviour, IPointerClickHandler // IPointerClickHandler is build for UI
 {
     [SerializeField] private GameObject unitPrefab = null;
