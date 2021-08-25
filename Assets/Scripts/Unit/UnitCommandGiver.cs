@@ -28,11 +28,12 @@ public class UnitCommandGiver : MonoBehaviour
     
         if(hit.collider.TryGetComponent<Targetable>(out Targetable newTarget))
         {
-            if (newTarget.hasAuthority)
+            if (newTarget.hasAuthority)// if we have authority on that target ...
             {
-                TryMove(hit.point);
+                TryMove(hit.point);// ... than we just move there but then return and not attach because if we have authority it is out unit not the enemy
+                return;
             }
-            TryTarget(newTarget);
+            TryTarget(newTarget);// here we do not have authority then target it
             return;
         }
 
