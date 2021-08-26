@@ -11,7 +11,7 @@ public class UnitMovement : NetworkBehaviour
     [SerializeField] private float chaseRange = 10f; // chase the target if we're outside this value
 
     #region Server
-    [ServerCallback] // [Server] attribute will only run the update() on the server. [ServerCallback the same but will not show warning and logs in the console.
+    [ServerCallback] // [Server] attribute will only run the update() on the server. [ServerCallback  same as Server but will not show warning and logs in the console.
     private void Update()
     {
         Targetable target = targeter.GetTarget();

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Targeter : NetworkBehaviour
 {
 
-    private Targetable target;
+    [SerializeField] private Targetable target;
 
     public Targetable GetTarget()
     {
@@ -24,7 +24,7 @@ public class Targeter : NetworkBehaviour
         this.target = newTarget;
     }
 
-    [Server] 
+    [Server] // so we do not call it on the client
     public void ClearTarget()
     {
         target = null;

@@ -8,7 +8,7 @@ using System;
 public class Unit : NetworkBehaviour
 {
     [SerializeField] private UnitMovement unitMovement = null;
-    [SerializeField] private Targeter targer = null;
+    [SerializeField] private Targeter targeter = null;
     [SerializeField] private UnityEvent onSelected = null;
     [SerializeField] private UnityEvent onDeselected = null;
 
@@ -27,7 +27,7 @@ public class Unit : NetworkBehaviour
 
     public Targeter GetTargeter()
     {
-        return targer;
+        return targeter;
     }
 
     #region Server
