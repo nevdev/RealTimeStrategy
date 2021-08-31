@@ -40,7 +40,7 @@ public class UnitProjectile : NetworkBehaviour
         {
             health.DealDamage(damageToDeal);
         }
-        DestroySelf();
+        DestroySelf(); // after projectile hits the enemy destroy itself 
     }
 
     // make a method on the server only to destroy the strayed projectile
