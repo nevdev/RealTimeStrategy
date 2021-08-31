@@ -24,8 +24,13 @@ public class UnitSelectionHandler : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
-
+        Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
         Invoke("GetPlayer", 0.1f);
+    }
+
+    private void OnDestroy()
+    {
+        Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
     }
 
     private void GetPlayer()
@@ -157,5 +162,11 @@ public class UnitSelectionHandler : MonoBehaviour
                 unit.Select();
             }
         }
+    }
+
+    // this subscribed method will remove the units from the Listwhich have died 
+    private void AuthorityHandleUnitDespawned(Unit unit)
+    {
+        SelectedUnits.Remove(unit);
     }
 }

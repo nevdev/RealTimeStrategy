@@ -169,6 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  health: {fileID: 5785264044051688598}
   unitMovement: {fileID: 5321923297034773301}
   targeter: {fileID: 49628828001937163}
   onSelected:
