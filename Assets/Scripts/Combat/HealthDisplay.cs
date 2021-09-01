@@ -22,18 +22,23 @@ public class HealthDisplay : MonoBehaviour
         health.ClientOnHealthUpdated -= HandleHealthUpdated;
     }
 
+    //Reminder:  OnMouseEnter uses the old Input system
     private void OnMouseEnter() // a Unity method which is called when this event happens, like on trigger enter :)
     {
         healthBarParent.SetActive(true);
     }
-
+    //Reminder:  OnMouseEnter uses the old Input system
     private void OnMouseExit()
     {
         healthBarParent.SetActive(false);
     }
 
+    // we're using two ints, one for the currentHealth and one for th max health - 
+    // ..so whenever the current change we divide the max with the current health to get a decimal value from 0.o, 0.1, 0.2 to 1.0
+    // we need from 0.0 to 1.0 because we're filling an image sprite accessing it from ther inspector and the fill colour set at horizontal from left to right
+    // changing this will be shown as a health bar
     private void HandleHealthUpdated(int currentHealth, int maxHealth)
     {
-        healthBarImage.fillAmount = (float) currentHealth / maxHealth;// typecast result int to flat 
+        healthBarImage.fillAmount =  currentHealth / maxHealth;// typecast result int to float to return value with decimal        
     }
 }
