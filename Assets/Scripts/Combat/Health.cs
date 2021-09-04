@@ -13,6 +13,8 @@ public class Health : NetworkBehaviour
     private int currenHealth;// whwnwever this syncvar changes will call to update the value from old to new
 
     public event Action ServerOnDie;
+
+    // ClientOnHealthUpdated
     // we're using two ints, one for the currentHealth and one for th max health - 
     // ..so whenever the current change we divide the max with the current health to get a decimal value from 0.o, 0.1, 0.2 to 1.0
     // we need from 0.0 to 1.0 because we're filling an image sprite accessing it from ther inspector and the fill colour set at horizontal from left to right
@@ -46,7 +48,7 @@ public class Health : NetworkBehaviour
         // if no one is listening (is null) do not invoke this event
         ServerOnDie?.Invoke();
 
-        Debug.Log("We Died");
+      //  Debug.Log("We Died");
     }
     #endregion
 
