@@ -10,14 +10,15 @@ public class GameOverHandler : NetworkBehaviour
 
     #region Server
 
-    public override void OnStartServer() // subscribing
+    public override void OnStartServer() // subscribing for Spawned & Despawned events hanlders 
     {
         UnitBase.ServerOnBaseSpawned += ServerHandleBaseSpawned;
-        UnitBase.ServerOnBaseSpawned += ServerHandleBaseDespawned;
+        UnitBase.ServerOnBaseDespawned += ServerHandleBaseDespawned;
     }
 
-    public override void OnStopServer() // un-subscribing
+    public override void OnStopServer() // un-subscribing after they were removed or killed for Spawned & Despawned events hanlders 
     {
+        Debug.Log("Server Stop");
         UnitBase.ServerOnBaseSpawned -= ServerHandleBaseSpawned;
         UnitBase.ServerOnBaseSpawned -= ServerHandleBaseDespawned;
     }
