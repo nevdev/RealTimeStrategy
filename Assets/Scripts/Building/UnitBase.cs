@@ -8,6 +8,11 @@ public class UnitBase : NetworkBehaviour
 {
     [SerializeField] private Health health = null;
 
+    // int = ID of the player that died
+    public static event Action<int> ServerOnPlayerDie;
+    // in health script can listen this event and when player dies and if ID matches the 
+    // ID of the person/player with this unit building, then destroy
+
     // everythime a base is spawned will be added to a list and will store all the remaining players
     // so whenever one of them despawned, either leave the server or die, then that is raised.
 
@@ -28,8 +33,13 @@ public class UnitBase : NetworkBehaviour
     }
 
     // Below is the implementation of the event invoked in Health object when health is Zero
+    [Server]
     private void ServerHandleDie()
     {
+        // coonectionID as we need to know which Player died so we know thar this UnitBase
+        // belongs to that player that died
+        ServerOnPlayerDie?.Invoke(connectionToClient.connectionId);
+
         NetworkServer.Destroy(gameObject);
     }
     #endregion // server

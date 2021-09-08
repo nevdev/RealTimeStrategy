@@ -10,12 +10,12 @@ public class Health : NetworkBehaviour
 
 
     [SyncVar(hook = nameof(HandleHealthUpdated))]
-    private int currenHealth;// whwnwever this syncvar changes will call to update the value from old to new
+    private int currenHealth;// whenever this syncvar changes will call to update the value from old to new
 
     public event Action ServerOnDie;
 
     // ClientOnHealthUpdated
-    // we're using two ints, one for the currentHealth and one for th max health - 
+    // we're using two inits, one for the currentHealth and one for th max health - 
     // ..so whenever the current change we divide the max with the current health to get a decimal value from 0.o, 0.1, 0.2 to 1.0
     // we need from 0.0 to 1.0 because we're filling an image sprite accessing it from ther inspector and the fill colour set at horizontal from left to right
     // changing this will be shown as a health bar
@@ -25,6 +25,21 @@ public class Health : NetworkBehaviour
     public override void OnStartServer()
     {
         currenHealth = maxHealth;
+        UnitBase.ServerOnPlayerDie += ServerHandlePlayerDie;
+    }
+
+    public override void OnStopServer()
+    {
+        base.OnStopServer();
+        UnitBase.ServerOnPlayerDie -= ServerHandlePlayerDie;
+    }
+
+    [Server]
+    private void ServerHandlePlayerDie(int connectionId)
+    {
+        // checking the connectionToClient.connectionId of this object does not match with the param connectionId
+        if (this.connectionToClient.connectionId != connectionId) { return; } // so it is not that player who dies, So return!
+        DealDamage(currenHealth);
     }
 
     [Server]
@@ -64,6 +79,6 @@ public class Health : NetworkBehaviour
         // just checking if ClientOnHealthUpdated is null, so if there are subscribers it will result Not Null and runs Invoke
     }
 
-    // you can alwaus add another listener like sound effect script class and inovke it from here
+    // you can alwats add another listener like sound effect script class and inovke it from here
     #endregion
 }

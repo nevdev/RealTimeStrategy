@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// inheriting Monobehaviour means this class is completely client side
 public class UnitSelectionHandler : MonoBehaviour
 {
     [SerializeField] private RectTransform unitSelectionArea = null; // to manipulate the dimensions of the DragBox when selecting objcts on screen
@@ -25,12 +26,16 @@ public class UnitSelectionHandler : MonoBehaviour
     {
         mainCamera = Camera.main;
         Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
-        Invoke("GetPlayer", 0.1f);
+        Invoke("GetPlayer", 0.1f); // modified, not like Nathan's otherwise will crash somehow
+
+        // we need to listen 
+        GameOverHandler.ClientOnGameOver += ClientHandleGameOver;
     }
 
     private void OnDestroy()
     {
         Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
+        GameOverHandler.ClientOnGameOver -= ClientHandleGameOver;
     }
 
     private void GetPlayer()
@@ -169,4 +174,13 @@ public class UnitSelectionHandler : MonoBehaviour
     {
         SelectedUnits.Remove(unit);
     }
+
+    private void ClientHandleGameOver(string winnerName)
+    {
+        // we fdnont need the string but we need to use the handler
+        enabled = false; // this will stop the default Update of this object  .. 
+        // ..hence Stopping to run the statments inside the Updade 
+
+    }
+
 }

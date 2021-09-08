@@ -1,8 +1,9 @@
 ﻿using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI ;
+using UnityEngine.AI;
 
 public class UnitMovement : NetworkBehaviour
 {
@@ -11,6 +12,17 @@ public class UnitMovement : NetworkBehaviour
     [SerializeField] private float chaseRange = 10f; // chase the target if we're outside this value
 
     #region Server
+
+    public override void OnStartServer()
+    {
+        GameOverHandler.ServerOnGameOver += ServerHandleGameOver;
+    }
+
+    public override void OnStopServer()
+    {
+        GameOverHandler.ServerOnGameOver -= ServerHandleGameOver;
+    }
+
     [ServerCallback] // [Server] attribute will only run the update() on the server. [ServerCallback  same as Server but will not show warning and logs in the console.
     private void Update()
     {
@@ -54,6 +66,12 @@ public class UnitMovement : NetworkBehaviour
         targeter.ClearTarget();
         if(!NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, NavMesh.AllAreas)) { return; }             
         agent.SetDestination(hit.position);
+    }
+
+    // stop agent from moving when the game is over
+    private void ServerHandleGameOver()
+    {
+        agent.ResetPath();
     }
 
     #endregion

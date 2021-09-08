@@ -14,9 +14,17 @@ public class UnitCommandGiver : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
+
+        // the implementaion of this handler will stop the update of this object...
+        GameOverHandler.ClientOnGameOver += ClientHandleGameOver;
+        // ..and by doing this will stop the ray cast and clicks on the object, because 
+        // .. the game's over! 
     }
 
-
+    private void OnDestroy()
+    {
+        GameOverHandler.ClientOnGameOver -= ClientHandleGameOver;
+    }
     private void Update()
     {
         
@@ -56,5 +64,10 @@ public class UnitCommandGiver : MonoBehaviour
         {
             unit.GetTargeter().CmdSetTarget(target.gameObject);
         }
+    }
+
+    private void ClientHandleGameOver(string winnerName)
+    {
+        enabled = false;
     }
 }

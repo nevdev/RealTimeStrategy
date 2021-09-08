@@ -29,10 +29,10 @@ public class UnitProjectile : NetworkBehaviour
         // we are getting other collider and getting its network identity information...
         if (other.TryGetComponent<NetworkIdentity>(out NetworkIdentity networkIdentity))
         {
-            // ... with that information we are reading we are checking the connoection to the cliens
+            // .. with that information we are reading we are checking the connoection to the clients
             if (networkIdentity.connectionToClient == connectionToClient) { return; }
-            // ... and if the connection to the client matches this projectile connectionToClient means that the collider we hit is our own.
-            // so return as we do not want to damage our own units.            
+            // .. and if the connection to the client matches with this projectile connectionToClient means that
+            // .. the collider we hit is our own. So return as we do not want to damage our own units.            
         }
 
         // othwerwise...
