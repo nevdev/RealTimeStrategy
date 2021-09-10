@@ -15,6 +15,7 @@ public class Unit : NetworkBehaviour
 
     public static event Action<Unit> ServerOnUnitSpawned;
     public static event Action<Unit> ServerOnUnitDespawned;
+
     public static event Action<Unit> AuthorityOnUnitSpawned;
     public static event Action<Unit> AuthorityOnUnitDespawned;
 
@@ -68,7 +69,7 @@ public class Unit : NetworkBehaviour
 
     public override void OnStartAuthority()
     {
-        if( !hasAuthority) { return; }
+       // if( !hasAuthority) { return; }
 
         AuthorityOnUnitSpawned?.Invoke(this);
     }
