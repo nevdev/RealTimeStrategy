@@ -42,9 +42,11 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         }   
 
         if(buildingPreviewInstance == null) { return; }
-        UpdateBuildingPreview();
-    }
 
+        // Method called while we are dragging
+         UpdateBuildingPreview();
+    }
+    // OnPointerDown & OnPointerUp is when we click
     public void OnPointerDown(PointerEventData eventData)
     {
         // if it is not the left button - return
@@ -55,7 +57,7 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         // .. that the previes itself does not have a renderer
         buildingRendererInstance = buildingPreviewInstance.GetComponentInChildren<Renderer>();
 
-        // keep it invisible until starts being soemwhat valid
+        // keep it invisible as soon it is spawned & until starts being soemwhat valid
         // because dragging it active is more expensive
         buildingPreviewInstance.SetActive(false);
     }
@@ -64,27 +66,30 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     {
         if (buildingPreviewInstance == null) { return; }
 
+        // Storing or referencing a ray...
         // Move the preview where the mouse is by continously get the 
-        // ..mouse poistion (camera sight auing on mouse position)  during dragging 
+        // ..mouse poistion (camera sight aiming on mouse position)  during dragging 
         Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         // until the raycasting of the mouse position is on the floor...
         // Do the raycast - hit is the data coming out from RaycastHit becasue we asked for the out information
-        if (!Physics.Raycast(ray, out RaycastHit shit, Mathf.Infinity, floorMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, floorMask))
         {
             // place building
+            player.CmdTryPlaceBuilding(building.GetId(), hit.point);
         }
 
-        // destroy thte preview after release
+        // destroy the preview after release of the mouse button
         Destroy(buildingPreviewInstance);
     }
 
+    // Move the preview while we are dragging OR where the mouse pointer is
     private void UpdateBuildingPreview()
     {
         Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        // below, if theray does not hit something then just return
+        // below, if the ray does not hit something then just return
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, floorMask)) { return; }
         //.. but if it hits the floor continue here
-        // the the transform.poisition of the buildingPreviewInstance wherever we hit
+        // set the transform.poisition of the buildingPreviewInstance wherever we hit
         buildingPreviewInstance.transform.position = hit.point;
 
         // if it is somwhere valid, make it active
@@ -93,4 +98,6 @@ public class BuildingButton : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             buildingPreviewInstance.SetActive(true);
         }
     }
+
+    
 }
